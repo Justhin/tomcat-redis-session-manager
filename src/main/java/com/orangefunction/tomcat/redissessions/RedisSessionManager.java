@@ -707,16 +707,23 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
       throw new LifecycleException("Error connecting to Redis", e);
     }
   }
-
+  /**
+   * modify by justhin 
+   * be used to tomcat8
+   *
+   */
   private void initializeSerializer() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
     log.info("Attempting to use serializer :" + serializationStrategyClass);
     serializer = (Serializer) Class.forName(serializationStrategyClass).newInstance();
 
     Loader loader = null;
-
-    if (getContainer() != null) {
-      loader = getContainer().getLoader();
-    }
+	Context context =this.getContext();
+	if(context != null){
+		load = context.getLoader();
+	}
+    //if (getContainer() != null) {
+    //  loader = getContainer().getLoader();
+    // }
 
     ClassLoader classLoader = null;
 
